@@ -1,4 +1,4 @@
-# Task DNS Record Maintainer
+# Task hostname maintainer
 
 This AWS Lambda function is used to maintain Route 53 DNS records updated every time a Fargate task is started. It will check all A records of the specified hosted zone and all tasks of the specified service and cluster. If a task does not have a record associated with its private IP and there is an existing A record whose IP does not correspond with any Fargate task, the _orphan_ task will be associated with the _invalid_ record. An orphan task is a task that does not have a host name that points to its private IP address in the hosted zone. An invalid record is a record that does not point to a Fargate task's private IP.
 
