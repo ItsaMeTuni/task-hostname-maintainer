@@ -6,9 +6,13 @@ import com.amazonaws.services.ecs.model.Task;
 import com.amazonaws.services.route53.AmazonRoute53;
 import com.amazonaws.services.route53.AmazonRoute53ClientBuilder;
 import com.amazonaws.services.route53.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HostnameMaintainer
 {
+    private static final Logger logger = LoggerFactory.getLogger(HostnameMaintainer.class);
+
     /**
      * Assigns orphan task IPs with invalid records.
      * Tasks that don't have their private IP associated with a record set
@@ -77,6 +81,7 @@ public class HostnameMaintainer
             {
                 //Ran out of records to assign IPs
                 //Issue an error
+                logger.error("There are remaining orphan IPs (not enough invalid records to assign them to). IPs: %s", orphanTaskIPs.toString());
                 break;
             }
         }
@@ -143,6 +148,7 @@ public class HostnameMaintainer
             else
             {
                 //Issue warning and ignore
+                logger.warn("ENI attachment is not present in task. Task ID: %s", task.getTaskArn());
             }
         }
 
@@ -178,6 +184,7 @@ public class HostnameMaintainer
             if(recordSet.getResourceRecords().size() != 1)
             {
                 //Issue warning and ignore
+                logger.warn("Record set does not have exactly one resource record (might have more than one or none). Record set name: %s", recordSet.getName());
                 continue;
             }
 

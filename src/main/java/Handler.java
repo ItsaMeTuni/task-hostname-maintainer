@@ -1,6 +1,5 @@
 import com.amazonaws.services.lambda.runtime.*;
 
-import java.util.List;
 import java.util.Map;
 
 public class Handler implements RequestHandler<Map<String,String>,String>
